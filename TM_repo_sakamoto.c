@@ -40,7 +40,7 @@ int q_1(int *status, int tape_symbol, int *i)
   }else{
 	*i = *i+1;
 	*status = 1;
-	return 0;
+	return 1;
   }
 
 }
@@ -48,12 +48,12 @@ int q_1(int *status, int tape_symbol, int *i)
 int q_2(int *status, int tape_symbol, int *i)
 {
   if(tape_symbol == 0){
-	*i = *i+1;
-	*status = 2;
-	return 0;
+	*i = *i-1;
+	*status = 3;
+	return 1;
   }else{
 	*i = *i+1;
-	*status = 3;
+	*status = 2;
 	return 1;
   }
 
@@ -62,11 +62,11 @@ int q_2(int *status, int tape_symbol, int *i)
 int q_3(int *status, int tape_symbol, int *i)
 {
   if(tape_symbol == 0){
-	*i = *i+1;
+	*i = *i-1;
 	*status = 4;
-	return 1;
+	return 0;
   }else{
-	*i = *i+1;
+	*i = *i-1;
 	*status = 3;
 	return 1;
   }
@@ -77,12 +77,26 @@ int q_4(int *status, int tape_symbol, int *i)
 {
   if(tape_symbol == 0){
 	*i = *i+1;
+	*status = 6;
+	return 0;
+  }else{
+	*i = *i-1;
 	*status = 5;
 	return 1;
-  }else{
+  }
+
+}
+
+int q_5(int *status, int tape_symbol, int *i)
+{
+  if(tape_symbol == 0){
 	*i = *i+1;
-	*status = 1;
+	*status = 0;
 	return 0;
+  }else{
+	*i = *i-1;
+	*status = 5;
+	return 1;
   }
 
 }
@@ -91,11 +105,11 @@ int q_H(int *status, int tape_symbol, int *i)
 {
   if(tape_symbol == 0){
 	*i = *i+1;
-	*status = 6;
+	*status = 7;
 	return 0;
   }else{
 	*i = *i+1;
-	*status = 6;
+	*status = 7;
 	return 0;
   }
 
@@ -118,6 +132,8 @@ void state_transition(int *status, int tape[N], int *i)
   }else if(*status == 4){
 	tape[j] = q_4(status, tape[j], i);
   }else if(*status == 5){
+	tape[j] = q_5(status, tape[j], i);
+  }else if(*status == 6){
 	tape[j] = q_H(status, tape[j], i);
   }
 
@@ -131,14 +147,14 @@ int main(void)
   int i = 0;
   int k = 0;
   int status = 0;
-  int tape[N] = {0,0,1,1,0,0,1,1,1,0,0};
+  int tape[N] = {0,0,1,0,1,0,0,0,0};
 
 
   while(status != 5){
 
 	state_transition(&status,tape,&i);
 
-	printf("<step%d>\n", i-1);
+	printf("<step%d>\n", k);
 	if(status < 5){
 	  printf("state:q_%d\n", status);
 	}else{
